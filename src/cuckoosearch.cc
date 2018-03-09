@@ -3,6 +3,7 @@
 #include <cuckoo.hh>
 #include <nest.hh>
 #include <vector>
+#include <fstream>
 
 double fitness(std::vector<double> cuckoo_egg,int number_of_parameters);
 
@@ -17,11 +18,15 @@ int main(int argc, char** argv)
 	//	int ouput = How often feedback is given to the user (e.g in wich generation)
 	//	double beta = Used in the Levy Flight
 	//	double pa = Fraction of worse nests to destroy
+	//	double stop_criterion = Stop criterion for the algorithm (minium fitness to get)
+	//	vector expected = Expected values (e.g real values)
+	//	vector upper_bounds : Each position of the vector contains the upper bound of the i parameter.
+	//	vector lower_bounds : Each position of the vector contains the lower bound of the i parameter.
 	char c;
 	int number_of_parameters=0,number_of_eggs=0,max_generation=0,t=0,ouput=10;
-	double beta=0.0,pa=0.0;
+	double beta=0.0,pa=0.0,stop_criterion=0.0;
 	extern char *optarg;
-	while((c=getopt(argc,argv,"p:n:g:b:f:o:"))!=-1)
+	while((c=getopt(argc,argv,"p:n:g:b:f:o"))!=-1)
 	{
 		switch (c)
 		{
@@ -45,6 +50,7 @@ int main(int argc, char** argv)
 				break;
 		}
 	}
+	//Parameters verification
 	if(number_of_parameters==0)
 	{
 		std::cout << "Mandatory parameter -p (number of parameters) needed" << std::endl;
@@ -72,13 +78,27 @@ int main(int argc, char** argv)
 	}
 	//This vector alocates the cuckoo eggs in each generation
 	std::vector<std::vector<double> > cuckoo_eggs(number_of_eggs);
-	//Upper and lower bounds
-	//TODO : get the upper and lower bound from json
-	std::vector<double> upper_bound;
-	std::vector<double> lower_bound;
+	std::vector<double> expected(number_of_parameters);
+	std::vector<double> lower_bound(number_of_parameters);
+	std::vector<double> upper_bound(number_of_parameters);
 
-	lower_bound.assign(number_of_parameters,0);
-	upper_bound.assign(number_of_parameters,4);		
+	//File read
+	std::ifstream input;
+	input.open("input.data",std::ifstream::in);
+	input >> stop_criterion;
+	for(int i=0;i<number_of_parameters;i++)
+	{
+		input >> expected[i];
+	}
+	for(int i=0;i<number_of_parameters;i++)
+	{
+		input >> lower_bound[i];
+	}
+	for(int i=0;i<number_of_parameters;i++)
+	{
+		input >> upper_bound[i];
+	}
+	input.close();
 
 	//Initialization of the cukoo and the nest class
 	cuckoo cko(beta,number_of_parameters);
@@ -111,9 +131,7 @@ int main(int argc, char** argv)
 		{
 			nst.postprocess();
 		}
-		//Stop criterion
-		//TODO : Get the criterion from json
-		if(fitness(nst.get_egg_solution(0),number_of_parameters) < 0.1)
+		if(fitness(nst.get_egg_solution(0),number_of_parameters) < stop_criterion)
 			break;
 	}
 	//Display of the best solution
