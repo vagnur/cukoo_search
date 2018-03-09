@@ -18,7 +18,7 @@ int main(int argc, char** argv)
 	//	double beta = Used in the Levy Flight
 	//	double pa = Fraction of worse nests to destroy
 	char c;
-	int number_of_parameters=0,number_of_eggs=0,max_generation=0,t=0,ouput=0;
+	int number_of_parameters=0,number_of_eggs=0,max_generation=0,t=0,ouput=10;
 	double beta=0.0,pa=0.0;
 	extern char *optarg;
 	while((c=getopt(argc,argv,"p:n:g:b:f:o:"))!=-1)
@@ -44,6 +44,31 @@ int main(int argc, char** argv)
 				ouput = std::stoi(optarg);
 				break;
 		}
+	}
+	if(number_of_parameters==0)
+	{
+		std::cout << "Mandatory parameter -p (number of parameters) needed" << std::endl;
+		return -1;
+	}
+	if(number_of_eggs==0)
+	{
+		std::cout << "Mandatory parameter -n (number of eggs) needed" << std::endl;
+		return -1;
+	}
+	if(max_generation==0)
+	{
+		std::cout << "Mandatory parameter -g (max number of iterations) needed" << std::endl;
+		return -1;
+	}
+	if(number_of_eggs==0)
+	{
+		std::cout << "Mandatory parameter -b (beta) needed" << std::endl;
+		return -1;
+	}
+	if(number_of_eggs==0)
+	{
+		std::cout << "Mandatory parameter -f (fraction of worse nests to destroy) needed" << std::endl;
+		return -1;
 	}
 	//This vector alocates the cuckoo eggs in each generation
 	std::vector<std::vector<double> > cuckoo_eggs(number_of_eggs);
@@ -87,7 +112,8 @@ int main(int argc, char** argv)
 			nst.postprocess();
 		}
 		//Stop criterion
-		if(fitness(nst.get_egg_solution(0),number_of_parameters) < 0.05)
+		//TODO : Get the criterion from json
+		if(fitness(nst.get_egg_solution(0),number_of_parameters) < 0.1)
 			break;
 	}
 	//Display of the best solution
