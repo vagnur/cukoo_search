@@ -143,13 +143,9 @@ int main(int argc, char** argv)
 	std::cout << "With Fitness: " << fitness(nst.get_egg_solution(0),number_of_parameters) << std::endl;
 }
 
+//TODO : Implement fitness function
+//			The function NEEDS to get a cuckoo_egg as vector and the number of parameters of the problem
 double fitness(std::vector<double> cuckoo_egg, int number_of_parameters)
 {
-	double fitness=0,value;
-	for(unsigned int i=0;i<cuckoo_egg.size();i++)
-	{
-		value = i-cuckoo_egg[i];
-		fitness = fitness + pow(value,2);
-	}
-	return fitness/number_of_parameters;
+	
 }
