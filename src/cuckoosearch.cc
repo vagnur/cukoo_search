@@ -26,7 +26,7 @@ int main(int argc, char** argv)
 	int number_of_parameters=0,number_of_eggs=0,max_generation=0,t=0,ouput=10;
 	double beta=0.0,pa=0.0,stop_criterion=0.0;
 	extern char *optarg;
-	while((c=getopt(argc,argv,"p:n:g:b:f:o"))!=-1)
+	while((c=getopt(argc,argv,"p:n:g:b:f:o:"))!=-1)
 	{
 		switch (c)
 		{
@@ -66,12 +66,12 @@ int main(int argc, char** argv)
 		std::cout << "Mandatory parameter -g (max number of iterations) needed" << std::endl;
 		return -1;
 	}
-	if(number_of_eggs==0)
+	if(beta==0)
 	{
 		std::cout << "Mandatory parameter -b (beta) needed" << std::endl;
 		return -1;
 	}
-	if(number_of_eggs==0)
+	if(pa==0)
 	{
 		std::cout << "Mandatory parameter -f (fraction of worse nests to destroy) needed" << std::endl;
 		return -1;
@@ -141,6 +141,7 @@ int main(int argc, char** argv)
 		std::cout << nst.get_egg_solution(0)[i] << " ";
 	}
 	std::cout << "With Fitness: " << fitness(nst.get_egg_solution(0),number_of_parameters) << std::endl;
+	return 0;
 }
 
 //TODO : Implement fitness function

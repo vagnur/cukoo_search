@@ -8,7 +8,6 @@ egg::egg(void)
 egg::egg(const int &number_of_parameters, const std::vector<double> lower_bounds, const std::vector<double> upper_bounds)
 {
 	//Each attribute of the class is initialized and the memory is reserved for each vector.
-
 	this->number_of_parameters = number_of_parameters;
 	this->solution.resize(number_of_parameters);
 	this->parameters_distributions.resize(number_of_parameters);
@@ -23,12 +22,10 @@ void egg::generate_solution(const std::function<double(std::vector<double>,int)>
 {
 	std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 generator(rd()); //Standard mersenne_twister_engine seeded with rd()
-    double random_value;
 	for(int i=0;i<this->number_of_parameters;i++)
 	{
 		//For each parameter, a random value is obtained and setted in the i position of the solution vector
-		random_value = this->parameters_distributions[i](generator);
-		this->solution[i] = random_value;
+		this->solution[i] = this->parameters_distributions[i](generator);
 	}
 	this->fitness = fitness(this->solution,this->number_of_parameters);
 }
