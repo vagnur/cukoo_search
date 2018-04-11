@@ -50,7 +50,7 @@ double cuckoo::levy_flight(const double &step_size)
 	return step_size*s;
 }
 
-std::vector<double> cuckoo::get_cuckoo(const std::vector<double> &nest_egg_solution, const double &step_size,const std::vector<double> &lower_bound, const std::vector<double> &upper_bound)
+std::vector<double> cuckoo::get_cuckoo(const std::vector<double> &nest_egg_solution, const double &step_size)
 {
 	std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 generator(rd()); //Standard mersenne_twister_engine seeded with rd()
@@ -61,16 +61,16 @@ std::vector<double> cuckoo::get_cuckoo(const std::vector<double> &nest_egg_solut
 		double levy_flight_perform_step = this->levy_flight(step_size);
 		double direction = this->direction(generator);
 		//Aplication of the bounds if needed
-		if(levy_flight_perform_step * direction + nest_egg_solution[i] <= lower_bound[i])
+		if(levy_flight_perform_step * direction + nest_egg_solution[i] <= 0.0)
 		{
-			this->solution[i] = lower_bound[i];
+			this->solution[i] = 0.0;
 		}
-		else if(levy_flight_perform_step * direction + nest_egg_solution[i] >= upper_bound[i])
+		else if(levy_flight_perform_step * direction + nest_egg_solution[i] >= 1.0)
 		{			
-			this->solution[i] = upper_bound[i];
+			this->solution[i] = 1.0;
 		}
 		//In any other case the new solution is given by X(t+1) = X(t) + alfa * Levy flight (alfa * Levy fligt is levy_flight_perform_step)
-		else if(levy_flight_perform_step * direction + nest_egg_solution[i] < upper_bound[i] && levy_flight_perform_step * direction + nest_egg_solution[i] > lower_bound[i])
+		else
 		{
 			this->solution[i] = nest_egg_solution[i] + levy_flight_perform_step * direction;
 		}

@@ -5,17 +5,17 @@ nest::nest(void)
 	;
 }
 
-nest::nest(const int &number_of_eggs, const int &number_of_parameters, const double &pa, const std::vector<double> lower_bounds, const std::vector<double> upper_bounds)
+nest::nest(const int &number_of_eggs, const int &number_of_parameters, const double &pa, const std::vector<double> min, const std::vector<double> max)
 {
 	//Each attribute of the class is initialized and the memory is reserved for each vector.
 	this->number_of_eggs = number_of_eggs;
 	this->number_of_parameters = number_of_parameters;
 	//The vector eggs is initialized whit an egg object in each position.
-	this->eggs.assign(number_of_eggs, egg(number_of_parameters,lower_bounds,upper_bounds));
+	this->eggs.assign(number_of_eggs, egg(number_of_parameters,min,max));
 	this->pa = pa;
 }
 
-void nest::initial_population(const std::function<double(std::vector<double>,int)> fitness)
+void nest::initial_population(const std::function<double(std::vector<double>,int,std::vector<double>,std::vector<double>)> fitness)
 {
 	for(int i=0;i<this->number_of_eggs;i++)
 	{
@@ -47,7 +47,7 @@ TODO : Understand this thing
 % be related to the difference in solutions.  Therefore, it is a good idea 
 % to do a random walk in a biased way with some random step sizes.  
 */
-void nest::discover_eggs(const std::function<double(std::vector<double>,int)> fitness)
+void nest::discover_eggs(const std::function<double(std::vector<double>,int,std::vector<double>,std::vector<double>)> fitness)
 {
 	//To obtain the first egg to be discovered 
 	int first_to_eliminate = this->number_of_eggs-(pa*this->number_of_eggs)-1;
@@ -66,13 +66,6 @@ void nest::rank_eggs(void)
 //TODO : Do a better post process
 void nest::postprocess(void)
 {
-	/*
-	for(int i=0;i<this->number_of_eggs;i++)
-	{
-		this->eggs[i].print_solution();
-		std::cout << std::endl;
-	}
-	*/
 	double mean=0;
 	for(int i=0;i<this->number_of_eggs;i++)
 	{
@@ -85,6 +78,11 @@ void nest::postprocess(void)
 std::vector<double> nest::get_egg_solution(const int &i) const
 {
 	return this->eggs[i].get_solution();
+}
+
+double nest::get_best_fitness(void) const
+{
+	return this->eggs[0].get_fitness();
 }
 
 nest::~nest(void)

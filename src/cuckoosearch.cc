@@ -5,7 +5,7 @@
 #include <vector>
 #include <fstream>
 
-double fitness(std::vector<double> cuckoo_egg,int number_of_parameters);
+double fitness(std::vector<double> cuckoo_egg,int number_of_parameters, std::vector<double> min, std::vector<double> max);
 
 int main(int argc, char** argv)
 { 
@@ -23,10 +23,10 @@ int main(int argc, char** argv)
 	//	vector upper_bounds : Each position of the vector contains the upper bound of the i parameter.
 	//	vector lower_bounds : Each position of the vector contains the lower bound of the i parameter.
 	char c;
-	int number_of_parameters=0,number_of_eggs=0,max_generation=0,t=0,ouput=10;
+	int number_of_parameters=0,number_of_eggs=0,max_generation=0,t=0,ouput=10;	
 	double beta=0.0,pa=0.0,stop_criterion=0.0;
 	extern char *optarg;
-	while((c=getopt(argc,argv,"p:n:g:b:f:o:"))!=-1)
+	while((c=getopt(argc,argv,"p:n:g:b:f:o:s:"))!=-1)
 	{
 		switch (c)
 		{
@@ -47,6 +47,9 @@ int main(int argc, char** argv)
 				break;
 			case 'o':
 				ouput = std::stoi(optarg);
+				break;
+			case 's':
+				stop_criterion = std::stod(optarg);
 				break;
 		}
 	}
@@ -76,33 +79,34 @@ int main(int argc, char** argv)
 		std::cout << "Mandatory parameter -f (fraction of worse nests to destroy) needed" << std::endl;
 		return -1;
 	}
+	if(stop_criterion==0.0)
+	{
+		std::cout << "Mandatory parameter -s (stop criterion) needed" << std::endl;
+		return -1;
+	}
 	//This vector alocates the cuckoo eggs in each generation
 	std::vector<std::vector<double> > cuckoo_eggs(number_of_eggs);
-	std::vector<double> expected(number_of_parameters);
-	std::vector<double> lower_bound(number_of_parameters);
-	std::vector<double> upper_bound(number_of_parameters);
+
+	//Min and max for each parameter
+	std::vector<double> min(number_of_parameters);
+	std::vector<double> max(number_of_parameters);
 
 	//File read
 	std::ifstream input;
 	input.open("input.data",std::ifstream::in);
-	input >> stop_criterion;
 	for(int i=0;i<number_of_parameters;i++)
 	{
-		input >> expected[i];
+		input >> min[i];
 	}
 	for(int i=0;i<number_of_parameters;i++)
 	{
-		input >> lower_bound[i];
-	}
-	for(int i=0;i<number_of_parameters;i++)
-	{
-		input >> upper_bound[i];
+		input >> max[i];
 	}
 	input.close();
 
 	//Initialization of the cukoo and the nest class
 	cuckoo cko(beta,number_of_parameters);
-	nest nst(number_of_eggs,number_of_parameters,pa,lower_bound,upper_bound);
+	nest nst(number_of_eggs,number_of_parameters,pa,min,max);
 
 	//CUCKOO SEARCH ALGORITHM
 
@@ -114,12 +118,12 @@ int main(int argc, char** argv)
 		//Get a cuckoo egg for each egg in the nest
 		for(int i=0;i<number_of_eggs;i++)
 		{
-			cuckoo_eggs[i] = cko.get_cuckoo(nst.get_egg_solution(i),0.01,lower_bound,upper_bound);
+			cuckoo_eggs[i] = cko.get_cuckoo(nst.get_egg_solution(i),0.01);
 		}
 		//The cuckoo eggs are compared and replaces if necesary
 		for(int i=0;i<number_of_eggs;i++)
 		{
-			nst.compare_eggs(fitness(cuckoo_eggs[i],number_of_parameters),cuckoo_eggs[i]);
+			nst.compare_eggs(fitness(cuckoo_eggs[i],number_of_parameters,min,max),cuckoo_eggs[i]);
 		}
 		//A fraction (pa) of worse nests are abandoned and rebuild (new solutions)
 		nst.discover_eggs(fitness);
@@ -131,22 +135,29 @@ int main(int argc, char** argv)
 		{
 			nst.postprocess();
 		}
-		if(fitness(nst.get_egg_solution(0),number_of_parameters) < stop_criterion)
+		if(nst.get_best_fitness() < stop_criterion)
 			break;
 	}
 	//Display of the best solution
 	std::cout << "Best egg (solution) at generation " << t << std::endl;
 	for(int i=0;i<number_of_parameters;i++)
 	{
-		std::cout << nst.get_egg_solution(0)[i] << " ";
+		std::cout << (nst.get_egg_solution(0)[i]*(max[i]-min[i]))+min[i] << " ";
 	}
-	std::cout << "With Fitness: " << fitness(nst.get_egg_solution(0),number_of_parameters) << std::endl;
+	std::cout << "With Fitness: " << nst.get_best_fitness() << std::endl;
 	return 0;
 }
 
-//TODO : Implement fitness function
-//			The function NEEDS to get a cuckoo_egg as vector and the number of parameters of the problem
-double fitness(std::vector<double> cuckoo_egg, int number_of_parameters)
+double fitness(std::vector<double> cuckoo_egg, int number_of_parameters, std::vector<double> min, std::vector<double> max)
 {
+	
+	double fitness=0,value,unormal_value;
+	for(unsigned int i=0;i<cuckoo_egg.size();i++)
+	{
+		unormal_value = (cuckoo_egg[i]*(max[i]-min[i]))+min[i];
+		value = i - unormal_value;
+		fitness = fitness + pow(value,2);
+	}
+	return fitness/number_of_parameters;
 	
 }

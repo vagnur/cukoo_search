@@ -14,7 +14,10 @@ private:
 	//Vector that represent a solution.
 	std::vector<double> solution;
 	//Random number generators for each parameter of the problem.
-	std::vector<std::uniform_real_distribution<double> > parameters_distributions;
+	std::uniform_real_distribution<double> parameter_selector;
+	//
+	std::vector<double> min;
+	std::vector<double> max;
 
 public:		
 	//Empy constructor
@@ -23,9 +26,9 @@ public:
 	//	int number_of_parameters : number of parameters in the problem
 	//	vector upper_bounds : Each position of the vector contains the upper bound of the i parameter.
 	//	vector lower_bounds : Each position of the vector contains the lower bound of the i parameter.
-	egg(const int &number_of_parameters, const std::vector<double> lower_bounds, const std::vector<double> upper_bounds);
+	egg(const int &number_of_parameters, const std::vector<double> min, const std::vector<double> max);
 	//Method that generate a new solution
-	void generate_solution(const std::function<double(std::vector<double>,int)> fitness);
+	void generate_solution(const std::function<double(std::vector<double>,int,std::vector<double>,std::vector<double>)> fitness);
 	//Method that change the actual solution with a new one.
 	//	vector new_egg : New egg (solution) to replace the actual one.
 	void change_egg(std::vector<double> new_egg);
