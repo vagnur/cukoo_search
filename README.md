@@ -12,7 +12,7 @@ In order to use the cuckoo search, you need to use the makefile of the repositor
 
 ## Usage
 
-First, you need to declare the fitness function. In the code we have an example of a fitness function.
+First, you need to declare the fitness function. In the code we have an example of a fitness function. The algorithm searchs in a [0,1] space, so you need to adjust the value of the parameters in the fitness function, see the example in [cuckoosearch.cc](../master/src/cuckoosearch.cc) file for details.
 
 Then, you need a file that contains the minimun and maximun value of each parameter _i_, like this:
 
