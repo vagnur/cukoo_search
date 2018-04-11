@@ -23,10 +23,6 @@ Then, you need a file that contains the minimun and maximun value of each parame
 
 In this case the parameters min and max, when _i=3_ for example, are 2 and 6 respectively.
 
-```python
-[0.083, 0.25, 0.25, 0.417]
-```
-
 ## Algorithm
 
 For more information see: _Yang, X. S., & Deb, S. (2009, December). Cuckoo search via Lévy flights. In Nature & Biologically Inspired Computing, 2009. NaBIC 2009. World Congress on (pp. 210-214). IEEE._
