@@ -20,8 +20,22 @@ Then, you need a file that contains the minimun and maximun value of each parame
 0 1 2 3 4
 4 5 6 7 8
 ```
-
 In this case the parameters min and max, when _i=3_ for example, are 2 and 6 respectively.
+
+To execute the program:
+
+```
+~@ ./cs -p -n -g -b -f -s
+```
+
+Where:
+
+* p -> Number of parameters in the problem
+* n -> Number of nests
+* g -> Maximum number of generations
+* b -> Betta parameter for the levy flight
+* f -> % of nest to destroy 
+* s -> Stop criterion
 
 ## Algorithm
 
