@@ -15,7 +15,7 @@ private:
 	std::vector<double> solution;
 	//Random number generators for each parameter of the problem.
 	std::uniform_real_distribution<double> parameter_selector;
-	//
+	//Vector that alocates the minimum and the maximum of each parameter at position i
 	std::vector<double> min;
 	std::vector<double> max;
 
@@ -24,8 +24,8 @@ public:
 	egg(void);
 	//Constructor of the class
 	//	int number_of_parameters : number of parameters in the problem
-	//	vector upper_bounds : Each position of the vector contains the upper bound of the i parameter.
-	//	vector lower_bounds : Each position of the vector contains the lower bound of the i parameter.
+	//	vector min : Each position of the vector contains the upper bound of the i parameter.
+	//	vector max : Each position of the vector contains the lower bound of the i parameter.
 	egg(const int &number_of_parameters, const std::vector<double> min, const std::vector<double> max);
 	//Method that generate a new solution
 	void generate_solution(const std::function<double(std::vector<double>,int,std::vector<double>,std::vector<double>)> fitness);

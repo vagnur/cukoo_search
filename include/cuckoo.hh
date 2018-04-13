@@ -34,8 +34,6 @@ public:
 	//Method that return a cuckoo egg (new solution)
 	//	vector nest_egg : egg from the nest (its used to generate the new solution).
 	//	double step_size : The actual size ot the levy flight.
-	//	vector upper_bounds : Each position of the vector contains the upper bound of the i parameter.
-	//	vector lower_bounds : Each position of the vector contains the lower bound of the i parameter.
 	std::vector<double> get_cuckoo(const std::vector<double> &nest_egg,const double &step_size);
 	//Destructor of the class
 	~cuckoo(void);

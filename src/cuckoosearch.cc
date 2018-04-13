@@ -20,8 +20,8 @@ int main(int argc, char** argv)
 	//	double pa = Fraction of worse nests to destroy
 	//	double stop_criterion = Stop criterion for the algorithm (minium fitness to get)
 	//	vector expected = Expected values (e.g real values)
-	//	vector upper_bounds : Each position of the vector contains the upper bound of the i parameter.
-	//	vector lower_bounds : Each position of the vector contains the lower bound of the i parameter.
+	//	vector min : Each position of the vector contains the upper bound of the i parameter.
+	//	vector max : Each position of the vector contains the lower bound of the i parameter.
 	char c;
 	int number_of_parameters=0,number_of_eggs=0,max_generation=0,t=0,ouput=10;	
 	double beta=0.0,pa=0.0,stop_criterion=0.0;
