@@ -163,5 +163,4 @@ double fitness(std::vector<double> solution, int number_of_parameters, std::vect
 		fitness = fitness + pow(value,2);
 	}
 	return fitness/number_of_parameters;
-	
 }

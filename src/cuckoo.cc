@@ -61,15 +61,15 @@ std::vector<double> cuckoo::get_cuckoo(const std::vector<double> &nest_egg_solut
 		double levy_flight_perform_step = this->levy_flight(step_size);
 		double direction = this->direction(generator);
 		//The new solution is given by X(t+1) = X(t) + alfa * Levy flight (alfa * Levy fligt is levy_flight_perform_step)
-		this->solution[i] = nest_egg_solution[i] + levy_flight_perform_step * direction;
+		this->solution[i] = nest_egg_solution[i] + (levy_flight_perform_step * direction);
 		//Aplication of the bounds if needed
-		if(this->solution[i] > 1.0)
-		{
-			this->solution[i] = 1.0;
-		}
-		if(this->solution[i] < 0.0)
+		if(this->solution[i] <= 0.0)
 		{
 			this->solution[i] = 0.0;
+		}
+		else if(this->solution[i] >= 1.0)
+		{			
+			this->solution[i] = 1.0;
 		}
 	}
 	return this->solution;
