@@ -41,6 +41,9 @@ Where:
 
 For more information see: _Yang, X. S., & Deb, S. (2009, December). Cuckoo search via Lévy flights. In Nature & Biologically Inspired Computing, 2009. NaBIC 2009. World Congress on (pp. 210-214). IEEE._
 
+
+For more information about Levy Flights, see chapter 2 of _Yang, X. S. (2010). Nature-inspired metaheuristic algorithms. Luniver press._
+
 ## License
 
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE.md](../master/LICENSE) file for details.
