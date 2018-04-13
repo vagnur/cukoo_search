@@ -148,13 +148,17 @@ int main(int argc, char** argv)
 	return 0;
 }
 
-double fitness(std::vector<double> cuckoo_egg, int number_of_parameters, std::vector<double> min, std::vector<double> max)
+//Example of fitness
+//In this case, the algorithm needs to guess the sequence [0,1,2,3,4]
+double fitness(std::vector<double> solution, int number_of_parameters, std::vector<double> min, std::vector<double> max)
 {
-	
 	double fitness=0,value,unormal_value;
-	for(unsigned int i=0;i<cuckoo_egg.size();i++)
+	//In this case wee use the Mean squared error
+	for(unsigned int i=0;i<solution.size();i++)
 	{
-		unormal_value = (cuckoo_egg[i]*(max[i]-min[i]))+min[i];
+		//See that, since the algorithm searchs in a [0,1] space,
+		//is necesary to adjust the values in the search space
+		unormal_value = (solution[i]*(max[i]-min[i]))+min[i];
 		value = i - unormal_value;
 		fitness = fitness + pow(value,2);
 	}
